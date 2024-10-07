@@ -18,15 +18,23 @@ public class CareersPage extends BasePage {
     By filterByOptions = By.cssSelector(".select2-results__option");
     By positionLocations = By.xpath("//div[contains(@class, 'position-list-item')]//div[contains(@class, 'position-location')]");
     By viewRoleButton = By.xpath("//a[text()='View Role']");
-    By positions = By.cssSelector(".position-list-item");
-    By positionsTitle = By.cssSelector(".position-list-item .position-title");
+    By ourLocationsBlock = By.cssSelector("#career-our-location .category-title-media");
+    By locationsSlider = By.cssSelector("#location-slider");
+    By locationsLeftArrow = By.cssSelector("#career-our-location .icon-arrow-left");
+    By locationsRightArrow = By.cssSelector("#career-our-location .icon-arrow-right");
+    String locationCity = "//div[@class='location-info']//p[text()='%s']";
+    By seeAllTeamsButton = By.cssSelector("#career-find-our-calling a.loadmore");
+    String teamByTitle = "//div[contains(@class, 'job-item')]//div[contains(@class,'job-title')]//h3[text()='%s']";
+    String teamByTitlePositions = "//div[contains(@class, 'job-item')][.//h3[text()='%s']]//div[contains(@class, 'job-open-position')]";
+    By lifeInsiderLabel = By.xpath("//h2[text()='Life at Insider']");
+    By swipeWrapper = By.cssSelector(".elementor-swiper .swiper-wrapper");
+    By rightArrow = By.cssSelector(".pagination-desktop .jobs-pagination .icon-arrow-right");
 
     public CareersPage() {
         waitForCareersPageLoaded();
     }
 
     public CareersPage waitForCareersPageLoaded() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(findJobUpperButton), 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(homeDropdown,
                 HomeDropdowns.WHY_INSIDER.getTitle()))), 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(String.format(homeDropdown,
@@ -60,18 +68,60 @@ public class CareersPage extends BasePage {
     }
 
     public CareersPage selectLocation(String location) {
+        scrollDown();
         clickOnElementWithWait(selectFilterByLocation, 5_000);
         scrollDownToElement(findWebElement(By.xpath(String.format(selectFilterLocationOption, location))));
         clickOnElement(By.xpath(String.format(selectFilterLocationOption, location)));
         return this;
     }
 
+    public CareersPage scrollToLocationSlide() {
+        scrollDownToElement(findWebElement(locationsSlider));
+        return this;
+    }
+
+    public CareersPage scrollToSeeAllTeams() {
+        scrollDownToElement(findWebElement(seeAllTeamsButton));
+        return this;
+    }
+
+    public CareersPage scrollToLifeInsiderLabel() {
+        scrollDownToElement(findWebElement(lifeInsiderLabel));
+        return this;
+    }
+
+    public boolean isSwipeWrapperVisible() { return isVisible(swipeWrapper); }
+
+    public CareersPage clickSeeAllTeams() {
+        clickOnElementWithWait(seeAllTeamsButton, 2_000);
+        return this;
+    }
+
+    public CareersPage clickRightArrow() {
+        scrollDownToElement(findWebElement(rightArrow));
+        clickOnElementWithWait(rightArrow, 2_000);
+        return this;
+    }
+
+    public boolean isOurLocationsBlockVisible() { return isVisible(ourLocationsBlock); }
+
+    public boolean isOurLocationsLeftArrowVisible() { return isVisible(locationsLeftArrow); }
+
+    public boolean isOurLocationsRightArrowVisible() { return isVisible(locationsRightArrow); }
+
+    public boolean isLocationsCityVisible(String city) { return isVisible(By.xpath(String.format(locationCity, city))); }
+
     public CareersPage clickSelectFilterByDepartmentLabel() {
         clickOnElement(selectFilterByDepartmentLabel);
         return this;
     }
 
+    public boolean isTeamByTitleVisible(String title) { return isVisible(By.xpath(String.format(teamByTitle, title)), 2); }
+
+    public boolean isTeamByTitlePositionsVisible(String title) { return isVisible(By.xpath(String.format(teamByTitlePositions, title))); }
+
     public CareersPage selectDepartment(String department) {
+        scrollDown();
         clickOnElementWithWait(selectFilterByDepartment, 5_000);
         scrollDownToElement(findWebElement(By.xpath(String.format(selectFilterDepartmentOption, department))));
         clickOnElement(By.xpath(String.format(selectFilterDepartmentOption, department)));
@@ -98,6 +148,7 @@ public class CareersPage extends BasePage {
 
     public boolean validateLocationFilter(String location) {
         scrollDown();
+        waitForCareersPageLoaded();
         return getLocations().stream()
                 .allMatch(filter -> filter.equals(location));
     }
@@ -118,7 +169,20 @@ public class CareersPage extends BasePage {
         return new LeverApplicationFormPage();
     }
 
-
-
+    public <T extends CareersPage> T clickTeamByTitleLabel(String title) {
+        wait.waitFor(3_000);
+        scrollDownToElement(findWebElement(By.xpath(String.format(teamByTitle, title))));
+        clickOnElementWithWait(By.xpath(String.format(teamByTitle, title)), 2_000);
+        switch (title) {
+            case "Customer Success":
+                return (T) new CustomerSuccessPage();
+            case "Marketing":
+                return (T) new MarketingPage();
+            case "Quality Assurance":
+                return (T) new QualityAssurancePage();
+            default:
+                return (T) new CareersPage();
+        }
+    }
 
 }

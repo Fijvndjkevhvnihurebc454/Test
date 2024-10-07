@@ -15,10 +15,8 @@ public class Settings {
         } else if(browserType.equals("firefox")) {
             WebDriverManager.firefoxdriver().setup();
             return new FirefoxDriver();
-        } else {
-            WebDriverManager.chromedriver().setup();
-            return new ChromeDriver(setupChromeOptions());
         }
+        return new ChromeDriver(setupChromeOptions());
     }
 
     private static ChromeOptions setupChromeOptions() {

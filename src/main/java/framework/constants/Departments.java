@@ -1,15 +1,11 @@
 package framework.constants;
 
 public enum Departments {
-    BUSINESS_DEVELOPMENT("Business Development"),
-    MOBILE_DEVELOPMENT("Mobile Development"),
-    PRODUCT_MANAGEMENT("Product Management"),
-    QUALITY_ASSURANCE("Quality Assurance"),
-    SOFTWARE_DEVELOPMENT("Software Development");
+    QUALITY_ASSURANCE("Quality Assurance");
 
     private final String department;
 
-    private Departments(String department) {
+    Departments(String department) {
         this.department = department;
     }
 

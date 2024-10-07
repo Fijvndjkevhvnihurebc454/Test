@@ -1,15 +1,11 @@
 package framework.constants;
 
 public enum Locations {
-    INSTANBUL_TURKEY("Istanbul, Turkey"),
-    PARIS_FRANCE("Paris, France"),
-    LONDON_UK("London, United Kingdom"),
-    UNITED_STATES("United States"),
-    BERLIN_GERMANY("Berlin, Germany");
+    ISTANBUL_TURKEY("Istanbul, Turkey");
 
     private final String location;
 
-    private Locations(String location) {
+    Locations(String location) {
         this.location = location;
     }
 

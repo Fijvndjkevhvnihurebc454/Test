@@ -2,22 +2,13 @@ package framework.base;
 
 import com.nordstrom.automation.testng.LinkedListeners;
 import framework.listener.WebDriverListener;
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
 
 import static framework.WebDriverManager.*;
 import static framework.WebDriverManager.getDriver;
@@ -31,7 +22,11 @@ public class BaseTest {
     @BeforeMethod(alwaysRun = true)
     public void beforeMethod() {
         quitDriver();
-        Configuration.getResourcesFromPropertyFile();
+            try {
+                Configuration.getResourcesFromPropertyFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         startBrowser();
         getDriver().manage().window().maximize();
         getDriver().manage().deleteAllCookies();

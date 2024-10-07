@@ -10,7 +10,7 @@ public enum HomeDropdowns {
 
     private final String title;
 
-    private HomeDropdowns(String title) {
+    HomeDropdowns(String title) {
         this.title = title;
     }
 

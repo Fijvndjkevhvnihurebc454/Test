@@ -33,11 +33,6 @@ public class HomePage extends BasePage {
         return this;
     }
 
-    public boolean isTakeTourVisible() {
-        return isVisible(By.xpath(String.format(homeDropdown,
-                HomeDropdowns.TAKE_TOUR.getTitle())), 5);
-    }
-
     public boolean isWhyInsiderVisible() {
         return isVisible(By.xpath(String.format(homeDropdown,
                 HomeDropdowns.WHY_INSIDER.getTitle())), 5);

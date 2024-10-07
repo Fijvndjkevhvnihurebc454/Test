@@ -2,7 +2,6 @@ package framework;
 
 import framework.base.Configuration;
 
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,8 @@ public class WebDriverManager {
 
     public static void setDriver(WebDriver driver) { driverThreadLocal.set(driver); }
 
+    public static void removeDriver() { driverThreadLocal.remove(); }
+
     public static void setPageLoadTimeout(int timeout) {
         getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(timeout));
     }
@@ -31,10 +32,6 @@ public class WebDriverManager {
 
     }
 
-    public static void setWindowSize(int width, int height) {
-        getDriver().manage().window().setSize(new Dimension(width, height));
-    }
-
     public static void startBrowser() {
         quitDriver();
         initAndSetupDriver();
@@ -42,7 +39,7 @@ public class WebDriverManager {
 
     public static String getBrowserType() {
         try {
-            if(Configuration.getBrowser().equals("") || Configuration.getBrowser().equals(null)) {
+            if(Configuration.getBrowser().equals("")) {
                 LOG.info(String.format("Getting browser type %s from command line", System.getProperty("browser")));
                 return System.getProperty("browser");
             } else {
@@ -63,6 +60,7 @@ public class WebDriverManager {
     public static void quitDriver() {
         if (Settings.driverEnabled(WebDriverManager.getDriver())) {
             WebDriverManager.getDriver().quit();
+            WebDriverManager.removeDriver();
         }
     }
 
